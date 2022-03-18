@@ -283,7 +283,16 @@ ul,li{
         function updateHandler(e){
             const idx = parseInt( e.target.parentNode.querySelector('input').value )
             const newReply = [...state.replay]
-            newReply[idx-1].updateFlag = false
+            let index 
+            for(let i =0; i < newReply.length; i++){
+                if(newReply[i].idx === idx){
+                    index = i
+                }
+            }
+
+            console.log(index)
+
+            newReply[index].updateFlag = false
             console.log(idx,newReply)
             state = {
                 ...state,
@@ -296,10 +305,19 @@ ul,li{
         function updateSubmitHandler(e){
             
             if(e.keyCode === 13){
+                
                 const idx = parseInt( e.target.parentNode.parentNode.querySelector('input[type=hidden]').value )
                 const newReplay = [...state.replay]
-                newReplay[idx-1].updateFlag = true
-                newReplay[idx-1].content = e.target.value
+
+                let index 
+                for(let i =0; i < newReplay.length; i++){
+                    if(newReplay[i].idx === idx){
+                        index = i
+                    }
+                }
+
+                newReplay[index].updateFlag = true
+                newReplay[index].content = e.target.value
 
                 state = {
                     ...state,
