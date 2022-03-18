@@ -258,13 +258,21 @@ ul,li{
                 const clone = document.importNode(commentList.content, true)
                 const row = clone.querySelectorAll('.comment-row > li')
                 row[0].innerHTML = v.userid
+                row[1].querySelector('input').value = v.idx
 
-                spanElement = document.createElement('span')
-                spanElement.innerHTML = v.content
-                const deleteBtn = row[1].querySelector('.comment-delete-btn')
-                spanelement.addEventListener('click',updateHandler)
-                deleteBtn.addEventListener('click',deleteHandler)
-                row[1].prepend(spanElement)
+                if ( v.updateFlag === true) {
+                    const spanElement = document.createElement('span')
+                    spanElement.innerHTML = v.content
+                    const deleteBtn = row[1].querySelector('.comment-delete-btn')
+                    spanElement.addEventListener('click',updateHandler)
+                    deleteBtn.addEventListener('click',deleteHandler)
+                    row[1].prepend(spanElement)
+                } else {
+                    const clone = document.importNode(commentInput.content,true)
+                    clone.querySelector('input').value = v.content
+                    clone.querySelector('input').addEventListener('keypress',updateSubmitHandler)
+                    row[1].prepend(clone)
+                }
 
                 row[2].innerHTML = v.date
 
@@ -272,12 +280,53 @@ ul,li{
             })
         }
 
-        function updateHandler(){
+        function updateHandler(e){
+            const idx = parseInt( e.target.parentNode.querySelector('input').value )
+            const newReply = [...state.replay]
+            newReply[idx-1].updateFlag = false
+            console.log(idx,newReply)
+            state = {
+                ...state,
+                replay:newReply
+            }
 
+            commentView()
         }
 
-        function deleteHandler(){
+        function updateSubmitHandler(e){
             
+            if(e.keyCode === 13){
+                const idx = parseInt( e.target.parentNode.parentNode.querySelector('input[type=hidden]').value )
+                const newReplay = [...state.replay]
+                newReplay[idx-1].updateFlag = true
+                newReplay[idx-1].content = e.target.value
+
+                state = {
+                    ...state,
+                    replay:newReplay
+                }
+
+                commentView()
+            }
+        }
+
+        function deleteHandler(e){
+            const idx = parseInt( e.target.parentNode.querySelector('input').value )
+            // DB 요청 
+            // let newReply = []
+            // for(let i=0; i<state.replay.length; i++){
+            //     if(state.replay[i].idx !== idx){
+            //         newReply.push(state.replay[i])
+            //     }
+            // }
+            const newReply = state.replay.filter(v => v.idx !== idx)
+            state = {
+                ...state,
+                replay:newReply,
+                length:newReply.length
+            }
+
+            commentView()
         }
 
         commentView()
