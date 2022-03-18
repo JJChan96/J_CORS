@@ -231,7 +231,8 @@ ul,li{
             e.preventDefault()
             const { input } = e.target
             const counting = e.target.querySelector('h4 > span')
-            const idx = parseInt( state.replay[state.replay.length-1].idx + 1 )
+            // 삼향연산자
+            const idx = state.replay.length != 0 ? parseInt(state.replay[state.replay.length-1].idx + 1) : 0
             const result = {idx,userid:'web7722',content:input.value,date:'2022-03-18',updateFlag:true}
             
             state = {
