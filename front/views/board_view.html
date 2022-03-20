@@ -210,6 +210,7 @@ ul,li{
             value:'',
             length:4,
         }
+        console.log(state)
 
         const commentApp = document.querySelector('#commentApp')
         const commentForm = document.querySelector('#commentForm')
@@ -233,7 +234,7 @@ ul,li{
             const { replay:{ length } } = state
             const counting = e.target.querySelector('h4 > span')
             // 삼향연산자
-            const idx = state.replay.length != 0 ? parseInt(state.replay[state.replay.length-1].idx + 1) : 0
+            const idx = state.replay.length != 0 ? parseInt(state.replay[state.replay.length-1].idx + 1) : 1
             const result = {idx,userid:'web7722',content:input.value,date:'2022-03-18',updateFlag:true}
             
             state = {
